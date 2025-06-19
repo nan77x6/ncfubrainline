@@ -22,6 +22,8 @@ import { useRouter } from 'vue-router'
 const subjectsWithTests = ref([])
 const router = useRouter()
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 const subjectIcons = [
   { keyword: 'алгебра', icon: '➗' },
   { keyword: 'английский', icon: '🇬🇧' },
@@ -53,7 +55,7 @@ function getToken() {
 async function fetchSubjectsWithTests() {
   const token = getToken()
   if (!token) return
-  const res = await fetch('http://localhost:8000/subjects/with_tests', {
+  const res = await fetch(`${API_URL}/subjects/with_tests`, { // заменили здесь
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

@@ -20,6 +20,7 @@ import { useRouter } from 'vue-router'
 
 const subjects = ref([])
 const router = useRouter()
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
 
 function getToken() {
   return localStorage.getItem('token')
@@ -51,7 +52,7 @@ function getSubjectIcon(name) {
 async function fetchSubjects() {
   const token = getToken()
   if (!token) return
-  const res = await fetch('http://localhost:8000/subjects/', {
+  const res = await fetch(`${API_URL}/subjects/`, { // заменили здесь
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

@@ -55,6 +55,7 @@ const loading = ref(true)
 const error = ref('')
 const subjectIcon = ref('📚')
 const hasTest = ref(false)
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
 
 const subjectIcons = [
   { keyword: 'алгебра', icon: '➗' },
@@ -100,14 +101,14 @@ const fetchMaterial = async () => {
   const materialId = route.params.materialId
 
   try {
-    const materialRes = await fetch(`http://localhost:8000/materials/${materialId}`, {
+    const materialRes = await fetch(`${API_URL}/materials/${materialId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     if (!materialRes.ok) throw new Error('Материал не найден')
     material.value = await materialRes.json()
 
     // Проверяем, есть ли тест для этого материала
-    const testRes = await fetch(`http://localhost:8000/tests/by_material/${materialId}`, {
+    const testRes = await fetch(`${API_URL}/tests/by_material/${materialId}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     if (testRes.ok) {
@@ -117,13 +118,13 @@ const fetchMaterial = async () => {
       hasTest.value = false
     }
 
-    const themeRes = await fetch(`http://localhost:8000/themes/${material.value.theme_id}`, {
+    const themeRes = await fetch(`${API_URL}/themes/${material.value.theme_id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     if (!themeRes.ok) throw new Error('Тема не найдена')
     const theme = await themeRes.json()
 
-    const subjectsRes = await fetch(`http://localhost:8000/subjects/`, {
+    const subjectsRes = await fetch(`${API_URL}/subjects/`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     if (!subjectsRes.ok) throw new Error('Ошибка загрузки предметов')

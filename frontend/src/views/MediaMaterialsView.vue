@@ -23,13 +23,14 @@ import { useRoute, useRouter } from 'vue-router'
 const materialsWithMedia = ref([])
 const router = useRouter()
 const route = useRoute()
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
 
 async function fetchMaterialsWithMedia() {
   const themeId = route.params.themeId
   const token = localStorage.getItem('token')
   if (!themeId || !token) return
   // Получаем только материалы, для которых есть медиа по теме
-  const res = await fetch(`http://localhost:8000/materials/with_media/${themeId}`, {
+  const res = await fetch(`${API_URL}/materials/with_media/${themeId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

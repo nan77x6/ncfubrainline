@@ -33,6 +33,7 @@ import { useRouter } from 'vue-router'
 const query = ref('')
 const results = ref([])
 const router = useRouter()
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
 
 function typeLabel(type) {
   switch (type) {
@@ -52,7 +53,7 @@ async function onSearch() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/search/all?q=${encodeURIComponent(q)}`, {
+  const res = await fetch(`${API_URL}/search/all?q=${encodeURIComponent(q)}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

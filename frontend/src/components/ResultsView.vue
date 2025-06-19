@@ -35,6 +35,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 const results = ref([])
 const loading = ref(true)
 
@@ -46,7 +48,7 @@ function formatDate(date) {
 onMounted(async () => {
   loading.value = true
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/test_results/my', {
+  const res = await fetch(`${API_URL}/test_results/my`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

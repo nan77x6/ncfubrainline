@@ -24,6 +24,8 @@ const router = useRouter()
 const themes = ref([])
 const subjectIcon = ref('➗')
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 // Список иконок как в SubjectsView.vue
 const subjectIcons = [
   { keyword: 'алгебра', icon: '➗' },
@@ -57,14 +59,14 @@ async function fetchThemes() {
   if (!token) return
   const subjectId = route.params.subjectId
   // Получаем темы
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${subjectId}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${subjectId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
     themes.value = await res.json()
   }
   // Получаем название предмета для иконки
-  const resSubj = await fetch(`http://localhost:8000/subjects/`, {
+  const resSubj = await fetch(`${API_URL}/subjects/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (resSubj.ok) {

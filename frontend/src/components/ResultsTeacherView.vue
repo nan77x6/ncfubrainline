@@ -49,6 +49,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 const subjects = ref([])
 const themes = ref([])
 const materials = ref([])
@@ -63,7 +65,7 @@ const selectedClass = ref('')
 
 async function fetchSubjects() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/subjects/', {
+  const res = await fetch(`${API_URL}/subjects/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -81,7 +83,7 @@ async function fetchThemes() {
   results.value = []
   if (!selectedSubject.value) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${selectedSubject.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${selectedSubject.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -97,7 +99,7 @@ async function fetchMaterials() {
   results.value = []
   if (!selectedTheme.value) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/materials/by_theme/${selectedTheme.value}`, {
+  const res = await fetch(`${API_URL}/materials/by_theme/${selectedTheme.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -111,7 +113,7 @@ async function fetchClasses() {
   results.value = []
   if (!selectedMaterial.value) return
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/classes/', {
+  const res = await fetch(`${API_URL}/classes/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -125,7 +127,7 @@ async function fetchResults() {
   loading.value = true
   const token = localStorage.getItem('token')
   const res = await fetch(
-    `http://localhost:8000/test_results/class?class_id=${selectedClass.value}&material_id=${selectedMaterial.value}`,
+    `${API_URL}/test_results/class?class_id=${selectedClass.value}&material_id=${selectedMaterial.value}`,
     { headers: { Authorization: `Bearer ${token}` } }
   )
   if (res.ok) {

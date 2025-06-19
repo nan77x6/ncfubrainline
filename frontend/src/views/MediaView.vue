@@ -21,6 +21,7 @@ import { useRouter } from 'vue-router'
 
 const subjectsWithMedia = ref([])
 const router = useRouter()
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
 
 const subjectIcons = [
   { keyword: 'алгебра', icon: '➗' },
@@ -52,7 +53,7 @@ function getToken() {
 async function fetchSubjectsWithMedia() {
   const token = getToken()
   if (!token) return
-  const res = await fetch('http://localhost:8000/subjects/with_media', {
+  const res = await fetch(`${API_URL}/subjects/with_media`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

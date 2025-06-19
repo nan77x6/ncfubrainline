@@ -97,6 +97,8 @@ const images = ref([])
 const videos = ref([])
 const others = ref([])
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 // Для модального окна изображений
 const showModal = ref(false)
 const currentImageIndex = ref(0)
@@ -107,7 +109,7 @@ async function fetchMedia() {
   const token = localStorage.getItem('token')
   
   // Получаем название материала
-  const matRes = await fetch(`http://localhost:8000/materials/${materialId}`, {
+  const matRes = await fetch(`${API_URL}/materials/${materialId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (matRes.ok) {
@@ -116,7 +118,7 @@ async function fetchMedia() {
   }
   
   // Получаем медиа
-  const res = await fetch(`http://localhost:8000/media/by_material/${materialId}`, {
+  const res = await fetch(`${API_URL}/media/by_material/${materialId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

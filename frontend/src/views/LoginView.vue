@@ -26,11 +26,12 @@ const loginValue = ref('')
 const passwordValue = ref('')
 const error = ref('')
 const router = useRouter()
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
 
 async function login() {
   error.value = ''
   try {
-    const response = await fetch('http://localhost:8000/token', {
+    const response = await fetch(`${API_URL}/token`, { // заменили здесь
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({

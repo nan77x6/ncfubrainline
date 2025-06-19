@@ -107,6 +107,8 @@ const percent = ref(0)
 const testLoaded = ref(false)
 const saveResultStatus = ref('')
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 function shuffle(arr) {
   return arr
     .map((a) => [Math.random(), a])
@@ -117,14 +119,14 @@ function shuffle(arr) {
 async function fetchTest() {
   const token = localStorage.getItem('token')
   // Получить тест
-  const res = await fetch(`http://localhost:8000/tests/${testId}`, {
+  const res = await fetch(`${API_URL}/tests/${testId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
     test.value = await res.json()
   }
   // Получить вопросы
-  const qres = await fetch(`http://localhost:8000/tests/questions/${testId}`, {
+  const qres = await fetch(`${API_URL}/tests/questions/${testId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (qres.ok) {
@@ -134,7 +136,7 @@ async function fetchTest() {
     // Для каждого вопроса получить варианты/пары и перемешать
     for (const q of qs) {
       if (q.question_type === 'single' || q.question_type === 'multiple') {
-        const optRes = await fetch(`http://localhost:8000/test_options/${q.id}`, {
+        const optRes = await fetch(`${API_URL}/test_options/${q.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (optRes.ok) {
@@ -150,7 +152,7 @@ async function fetchTest() {
           answers[q.id] = []
         }
       } else if (q.question_type === 'match') {
-        const pairRes = await fetch(`http://localhost:8000/test_pairs/${q.id}`, {
+        const pairRes = await fetch(`${API_URL}/test_pairs/${q.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (pairRes.ok) {
@@ -210,7 +212,7 @@ async function submitTest() {
 
 async function saveResult() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/test_results/', {
+  const res = await fetch(`${API_URL}/test_results/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({

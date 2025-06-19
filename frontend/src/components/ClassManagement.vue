@@ -138,6 +138,8 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 const classes = ref([])
 const students = ref([])
 const createName = ref('')
@@ -161,7 +163,7 @@ const subjectsWithTeachers = ref([])
 
 async function fetchClasses() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/classes/', {
+  const res = await fetch(`${API_URL}/classes/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -171,7 +173,7 @@ async function fetchClasses() {
 
 async function fetchStudents() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/users/students_without_class/', {
+  const res = await fetch(`${API_URL}/users/students_without_class/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -182,7 +184,7 @@ async function fetchStudents() {
 async function createClass() {
   createResult.value = ''
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/classes/', {
+  const res = await fetch(`${API_URL}/classes/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ class_name: createName.value })
@@ -204,7 +206,7 @@ async function updateClass() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/classes/${editId.value}`, {
+  const res = await fetch(`${API_URL}/classes/${editId.value}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ class_name: editName.value })
@@ -227,7 +229,7 @@ async function deleteClass() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/classes/${deleteId.value}`, {
+  const res = await fetch(`${API_URL}/classes/${deleteId.value}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
@@ -248,7 +250,7 @@ async function addStudentToClass() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/user-classes/?user_id=${addStudentUserId.value}&class_id=${addStudentClassId.value}`, {
+  const res = await fetch(`${API_URL}/user-classes/?user_id=${addStudentUserId.value}&class_id=${addStudentClassId.value}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({
@@ -273,7 +275,7 @@ watch(removeClassId, async (newClassId) => {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/classes/${newClassId}/students`, {
+  const res = await fetch(`${API_URL}/classes/${newClassId}/students`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -288,7 +290,7 @@ async function removeStudentFromClass() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/user-classes/${removeStudentId.value}`, {
+  const res = await fetch(`${API_URL}/user-classes/${removeStudentId.value}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
@@ -308,7 +310,7 @@ async function fetchClassStudents() {
   if (!viewClassId.value) return
   showClassStudents.value = false
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/classes/${viewClassId.value}/students`, {
+  const res = await fetch(`${API_URL}/classes/${viewClassId.value}/students`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -325,7 +327,7 @@ function hideClassStudents() {
 
 async function fetchSubjectsWithTeachers() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/subjects/with-teachers', {
+  const res = await fetch(`${API_URL}/subjects/with-teachers`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

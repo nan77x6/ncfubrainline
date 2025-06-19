@@ -23,13 +23,14 @@ import { useRoute, useRouter } from 'vue-router'
 const themesWithTests = ref([])
 const router = useRouter()
 const route = useRoute()
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
 
 async function fetchThemesWithTests() {
   const subjectId = route.params.subjectId
   const token = localStorage.getItem('token')
   if (!subjectId || !token) return
   // Получаем только темы, для которых есть материалы с тестами
-  const res = await fetch(`http://localhost:8000/themes/with_tests/${subjectId}`, {
+  const res = await fetch(`${API_URL}/themes/with_tests/${subjectId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

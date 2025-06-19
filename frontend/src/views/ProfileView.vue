@@ -91,6 +91,7 @@ import ResultsView from '@/components/ResultsView.vue'
 import ResultsTeacherView from '@/components/ResultsTeacherView.vue'
 import MediaManagement from '@/components/MediaManagement.vue'
 
+
 const router = useRouter()
 
 const user = ref({ full_name: '', role: '' })
@@ -103,7 +104,7 @@ const showTestMgmt = ref(false)
 const showResults = ref(false)
 const showResultsTeacher = ref(false)
 const showMediaMgmt = ref(false)
-
+const API_URL = import.meta.env.VITE_API_URL;
 function openUserMgmt() {
   showUserMgmt.value = true
   showClassMgmt.value = false
@@ -214,7 +215,7 @@ function roleName(role) {
 // Получаем данные только о текущем пользователе
 onMounted(async () => {
   const token = localStorage.getItem('token')
-  const response = await fetch('http://localhost:8000/users/me', {
+  const response = await fetch(`${API_URL}/users/me`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (response.ok) {
