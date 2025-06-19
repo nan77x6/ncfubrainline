@@ -211,6 +211,8 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 function onRoleChange() {
   hideAllLists();
 }
@@ -232,7 +234,7 @@ const createResult = ref('')
 async function createUser() {
   createResult.value = ''
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/users/', {
+  const res = await fetch(`${API_URL}/users/`, { // заменили здесь
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify(createForm.value)
@@ -253,7 +255,7 @@ const bulkResult = ref('')
 const classes = ref([])
 async function fetchClasses() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/classes/', {
+  const res = await fetch(`${API_URL}/classes/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -273,7 +275,7 @@ async function bulkAddStudents() {
   const formData = new FormData()
   formData.append('class_id', bulkForm.value.class_id)
   formData.append('file', bulkForm.value.file)
-  const res = await fetch('http://localhost:8000/users/bulk_students/', {
+  const res = await fetch(`${API_URL}/users/bulk_students/`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: formData
@@ -293,7 +295,7 @@ const editResult = ref('')
 async function fetchUser() {
   editResult.value = ''
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/users/?role=`, {
+  const res = await fetch(`${API_URL}/users/?role=`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -327,7 +329,7 @@ async function updateUser() {
   if (editForm.value.password) body.password = editForm.value.password
   if (editForm.value.full_name) body.full_name = editForm.value.full_name
   if (editForm.value.role) body.role = editForm.value.role
-  const res = await fetch(`http://localhost:8000/users/${editForm.value.id}`, {
+  const res = await fetch(`${API_URL}/users/${editForm.value.id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify(body)
@@ -345,7 +347,7 @@ const deleteResult = ref('')
 async function deleteUser() {
   deleteResult.value = ''
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/users/${deleteForm.value.id}`, {
+  const res = await fetch(`${API_URL}/users/${deleteForm.value.id}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
@@ -366,7 +368,7 @@ async function bulkDeleteUsers() {
     start_id: bulkDeleteForm.value.start_id,
     end_id: bulkDeleteForm.value.end_id
   })
-  const res = await fetch(`http://localhost:8000/users/bulk_delete/?${params}`, {
+  const res = await fetch(`${API_URL}/users/bulk_delete/?${params}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
@@ -385,7 +387,7 @@ async function deleteUsersByClass() {
   deleteByClassResult.value = ''
   const token = localStorage.getItem('token')
   const params = new URLSearchParams({ class_id: deleteByClassForm.value.class_id })
-  const res = await fetch(`http://localhost:8000/users/delete_by_class/?${params}`, {
+  const res = await fetch(`${API_URL}/users/delete_by_class/?${params}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
@@ -423,7 +425,7 @@ async function fetchUsers() {
   const token = localStorage.getItem('token')
 
   if (listRole.value === 'students_without_class') {
-    const res = await fetch('http://localhost:8000/users/students_without_class/', {
+    const res = await fetch(`${API_URL}/users/students_without_class/`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     if (res.ok) {
@@ -434,7 +436,7 @@ async function fetchUsers() {
   }
 
   if (listRole.value === 'teachers_without_subject') {
-    const res = await fetch('http://localhost:8000/users/teachers_without_subject/', {
+    const res = await fetch(`${API_URL}/users/teachers_without_subject/`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     if (res.ok) {
@@ -446,7 +448,7 @@ async function fetchUsers() {
 
   // Обычный список пользователей
   const params = listRole.value ? `?role=${listRole.value}` : ''
-  const res = await fetch(`http://localhost:8000/users/${params}`, {
+  const res = await fetch(`${API_URL}/users/${params}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

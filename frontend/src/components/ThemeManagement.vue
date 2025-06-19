@@ -111,6 +111,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 const subjects = ref([])
 const createSubjectId = ref('')
 const createThemeName = ref('')
@@ -133,7 +135,7 @@ const showThemesTable = ref(false)
 
 async function fetchSubjects() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/subjects/', {
+  const res = await fetch(`${API_URL}/subjects/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -147,7 +149,7 @@ async function fetchThemesForEdit() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${editSubjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${editSubjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -161,7 +163,7 @@ async function fetchThemesForDelete() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${deleteSubjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${deleteSubjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -176,7 +178,7 @@ async function fetchThemesForView() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${viewSubjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${viewSubjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -192,7 +194,7 @@ async function createTheme() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/themes/', {
+  const res = await fetch(`${API_URL}/themes/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ theme_name: createThemeName.value, subject_id: createSubjectId.value })
@@ -214,7 +216,7 @@ async function updateTheme() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/${editThemeId.value}`, {
+  const res = await fetch(`${API_URL}/themes/${editThemeId.value}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ theme_name: editThemeName.value, subject_id: editSubjectId.value })
@@ -237,7 +239,7 @@ async function deleteTheme() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/${deleteThemeId.value}`, {
+  const res = await fetch(`${API_URL}/themes/${deleteThemeId.value}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })

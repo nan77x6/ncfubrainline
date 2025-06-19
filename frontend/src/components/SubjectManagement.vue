@@ -136,6 +136,8 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 const subjects = ref([])
 const teachers = ref([])
 const subjectTeachers = ref([])
@@ -161,7 +163,7 @@ const showList = ref(false)
 
 async function fetchSubjects() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/subjects/', {
+  const res = await fetch(`${API_URL}/subjects/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -171,7 +173,7 @@ async function fetchSubjects() {
 
 async function fetchTeachers() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/users/teachers_with_flag/', {
+  const res = await fetch(`${API_URL}/users/teachers_with_flag/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -186,7 +188,7 @@ watch(removeSubjectId, async (newVal) => {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/subjects/${newVal}/teachers`, {
+  const res = await fetch(`${API_URL}/subjects/${newVal}/teachers`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -206,7 +208,7 @@ const sortedTeachers = computed(() => {
 async function createSubject() {
   createResult.value = ''
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/subjects/', {
+  const res = await fetch(`${API_URL}/subjects/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ subject_name: createName.value })
@@ -228,7 +230,7 @@ async function updateSubject() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/subjects/${editId.value}`, {
+  const res = await fetch(`${API_URL}/subjects/${editId.value}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({ subject_name: editName.value })
@@ -251,7 +253,7 @@ async function deleteSubject() {
     return
   }
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/subjects/${deleteId.value}`, {
+  const res = await fetch(`${API_URL}/subjects/${deleteId.value}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
@@ -273,7 +275,7 @@ async function assignTeacher() {
   }
   const token = localStorage.getItem('token')
   const res = await fetch(
-    `http://localhost:8000/user-subjects/?user_id=${Number(assignTeacherId.value)}&subject_id=${Number(assignSubjectId.value)}`,
+    `${API_URL}/user-subjects/?user_id=${Number(assignTeacherId.value)}&subject_id=${Number(assignSubjectId.value)}`,
     {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
@@ -300,14 +302,14 @@ async function removeTeacher() {
   const teacherId = typeof removeTeacherId.value === 'object' ? removeTeacherId.value.id : removeTeacherId.value
   const subjectId = typeof removeSubjectId.value === 'object' ? removeSubjectId.value.id : removeSubjectId.value
 
-  const res = await fetch(`http://localhost:8000/user-subjects/?user_id=${teacherId}&subject_id=${subjectId}`, {
+  const res = await fetch(`${API_URL}/user-subjects/?user_id=${teacherId}&subject_id=${subjectId}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
     removeResult.value = 'Учитель удалён из предмета'
     removeTeacherId.value = ''
-    const res2 = await fetch(`http://localhost:8000/subjects/${removeSubjectId.value}/teachers`, {
+    const res2 = await fetch(`${API_URL}/subjects/${removeSubjectId.value}/teachers`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     if (res2.ok) {
@@ -323,7 +325,7 @@ async function removeTeacher() {
 async function fetchSubjectList() {
   showList.value = false
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/subjects/with-teachers', {
+  const res = await fetch(`${API_URL}/subjects/with-teachers`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {

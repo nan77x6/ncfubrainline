@@ -144,6 +144,8 @@ import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import SimpleMDE from 'simplemde'
 import 'simplemde/dist/simplemde.min.css'
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 // --- Данные и состояния ---
 const subjects = ref([])
 const addThemes = ref([])
@@ -190,7 +192,7 @@ function getToken() {
 async function fetchSubjects() {
   const token = getToken()
   if (!token) return
-  const res = await fetch('http://localhost:8000/subjects/', {
+  const res = await fetch(`${API_URL}/subjects/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -205,7 +207,7 @@ async function fetchThemesForAdd() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${addSubjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${addSubjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -220,7 +222,7 @@ async function fetchThemesForEdit() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${editSubjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${editSubjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -236,7 +238,7 @@ async function fetchThemesForDelete() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${deleteSubjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${deleteSubjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -252,7 +254,7 @@ async function fetchThemesForView() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${viewSubjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${viewSubjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -267,7 +269,7 @@ async function fetchMaterialsForEdit() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/materials/by_theme/${editThemeId.value}`, {
+  const res = await fetch(`${API_URL}/materials/by_theme/${editThemeId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -281,7 +283,7 @@ async function fetchMaterialsForDelete() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/materials/by_theme/${deleteThemeId.value}`, {
+  const res = await fetch(`${API_URL}/materials/by_theme/${deleteThemeId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -296,7 +298,7 @@ async function fetchMaterialsForView() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/materials/by_theme/${viewThemeId.value}`, {
+  const res = await fetch(`${API_URL}/materials/by_theme/${viewThemeId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -351,7 +353,7 @@ async function createMaterial() {
     return
   }
   const token = getToken()
-  const res = await fetch('http://localhost:8000/materials/', {
+  const res = await fetch(`${API_URL}/materials/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({
@@ -378,7 +380,7 @@ async function updateMaterial() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/materials/${editMaterialId.value}`, {
+  const res = await fetch(`${API_URL}/materials/${editMaterialId.value}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     body: JSON.stringify({
@@ -403,7 +405,7 @@ async function deleteMaterial() {
     return
   }
   const token = getToken()
-  const res = await fetch(`http://localhost:8000/materials/${deleteMaterialId.value}`, {
+  const res = await fetch(`${API_URL}/materials/${deleteMaterialId.value}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })

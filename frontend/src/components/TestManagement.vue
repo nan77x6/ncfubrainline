@@ -146,6 +146,8 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 // --- Общие данные ---
 const subjects = ref([])
 const tests = ref([])
@@ -196,8 +198,8 @@ async function saveTest() {
   add.value.result = ''
   const token = localStorage.getItem('token')
   const url = editingTestId.value
-    ? `http://localhost:8000/tests/full/${editingTestId.value}`
-    : 'http://localhost:8000/tests/full'
+    ? `${API_URL}/tests/full/${editingTestId.value}`
+    : `${API_URL}/tests/full`
   const method = editingTestId.value ? 'PUT' : 'POST'
   const res = await fetch(url, {
     method,
@@ -231,7 +233,7 @@ async function fetchAddThemes() {
   add.value.materials = []
   if (!add.value.subjectId) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${add.value.subjectId}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${add.value.subjectId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) add.value.themes = await res.json()
@@ -242,7 +244,7 @@ async function fetchAddMaterials() {
   add.value.materials = []
   if (!add.value.themeId) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/materials/by_theme/${add.value.themeId}`, {
+  const res = await fetch(`${API_URL}/materials/by_theme/${add.value.themeId}`, {
     headers: { 'Authorization': `Bearer ${token}` }
   })
   if (res.ok) add.value.materials = await res.json()
@@ -253,7 +255,7 @@ async function fetchTestsForMaterial(materialId) {
   tests.value = []
   if (!materialId) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/tests/by_material/${materialId}`, {
+  const res = await fetch(`${API_URL}/tests/by_material/${materialId}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) tests.value = await res.json()
@@ -272,7 +274,7 @@ async function editTest(test) {
   add.value.title = test.title
   // Получить вопросы теста
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/tests/questions/${test.id}`, {
+  const res = await fetch(`${API_URL}/tests/questions/${test.id}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -285,7 +287,7 @@ async function editTest(test) {
       let correct = null
       if (q.question_type === 'single' || q.question_type === 'multiple') {
         // Получить варианты
-        const optRes = await fetch(`http://localhost:8000/test_options/${q.id}`, {
+        const optRes = await fetch(`${API_URL}/test_options/${q.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (optRes.ok) {
@@ -297,7 +299,7 @@ async function editTest(test) {
       }
       if (q.question_type === 'match') {
         // Получить пары
-        const pairRes = await fetch(`http://localhost:8000/test_pairs/${q.id}`, {
+        const pairRes = await fetch(`${API_URL}/test_pairs/${q.id}`, {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (pairRes.ok) pairs = await pairRes.json()
@@ -325,7 +327,7 @@ function cancelEdit() {
 async function deleteTest(testId) {
   if (!confirm('Удалить тест?')) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/tests/${testId}`, {
+  const res = await fetch(`${API_URL}/tests/${testId}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
@@ -339,7 +341,7 @@ async function deleteTest(testId) {
 
 onMounted(async () => {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/subjects/', {
+  const res = await fetch(`${API_URL}/subjects/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) subjects.value = await res.json()

@@ -70,6 +70,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
+const API_URL = import.meta.env.VITE_API_URL; // добавьте эту строку
+
 const subjects = ref([])
 const themes = ref([])
 const materials = ref([])
@@ -93,7 +95,7 @@ onMounted(fetchSubjects)
 
 async function fetchSubjects() {
   const token = localStorage.getItem('token')
-  const res = await fetch('http://localhost:8000/subjects/', {
+  const res = await fetch(`${API_URL}/subjects/`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -109,7 +111,7 @@ async function onSubjectChange() {
   materials.value = []
   if (!subjectId.value) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${subjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${subjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -122,7 +124,7 @@ async function onThemeChange() {
   materials.value = []
   if (!themeId.value) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/materials/by_theme/${themeId.value}`, {
+  const res = await fetch(`${API_URL}/materials/by_theme/${themeId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -145,7 +147,7 @@ async function uploadMedia() {
   formData.append('file', file.value)
   const token = localStorage.getItem('token')
   uploadStatus.value = 'Загрузка...'
-  const res = await fetch('http://localhost:8000/media/upload/', {
+  const res = await fetch(`${API_URL}/media/upload/`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: formData
@@ -168,7 +170,7 @@ async function onDelSubjectChange() {
   mediaList.value = []
   if (!delSubjectId.value) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/themes/by_subject/${delSubjectId.value}`, {
+  const res = await fetch(`${API_URL}/themes/by_subject/${delSubjectId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -183,7 +185,7 @@ async function onDelThemeChange() {
   mediaList.value = []
   if (!delThemeId.value) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/materials/by_theme/${delThemeId.value}`, {
+  const res = await fetch(`${API_URL}/materials/by_theme/${delThemeId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -196,7 +198,7 @@ async function onDelMaterialChange() {
   mediaList.value = []
   if (!delMaterialId.value) return
   const token = localStorage.getItem('token')
-  const res = await fetch(`http://localhost:8000/media/by_material/${delMaterialId.value}`, {
+  const res = await fetch(`${API_URL}/media/by_material/${delMaterialId.value}`, {
     headers: { Authorization: `Bearer ${token}` }
   })
   if (res.ok) {
@@ -208,7 +210,7 @@ async function deleteMedia() {
   if (!mediaIdToDelete.value) return
   const token = localStorage.getItem('token')
   deleteStatus.value = 'Удаление...'
-  const res = await fetch(`http://localhost:8000/media/${mediaIdToDelete.value}`, {
+  const res = await fetch(`${API_URL}/media/${mediaIdToDelete.value}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` }
   })
