@@ -1,0 +1,13 @@
+@import './base.css';
+
+:root {
+  --sidebar-width: 360px;      /* ширина боковой панели */
+  --navbar-height: 30px;       /* высота навбара (подберите под ваш navbar) */
+}
+
+#app {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
